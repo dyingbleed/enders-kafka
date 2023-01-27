@@ -1,0 +1,9 @@
+- name: INIT - ensure zookeeper_myid var
+  fail:
+    msg: "zookeeper_myid is required"
+  when: "zookeeper_myid is undefined"
+- name: INIT - service facts
+  service_facts:
+- name: INIT - disable selinux
+  selinux:
+    state: disabled

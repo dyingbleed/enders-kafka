@@ -1,0 +1,16 @@
+[Unit]
+Description=Apache ZooKeeper
+After=network-online.target
+
+[Service]
+Type=folking
+User=zk
+Group=zk
+ExecStart={{ zookeeper_home }}/bin/zkServer.sh start
+ExecStop={{ zookeeper_home }}/bin/zkServer.sh stop
+PIDFile={{ zookeeper_data_dir }}/zookeeper_server.pid
+Restart=on-failure
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,6 @@
+- name: kafka
+  hosts: all
+  become: True
+  roles:
+    - zookeeper
+    - kafka
