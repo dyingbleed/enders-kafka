@@ -1,6 +1,6 @@
 galaxy_info:
   author: Anthony Li
-  description: Apache Kafka Role
+  description: Apache Kafka Connect Role
   license: Apache-2.0
   min_ansible_version: 2.1
   galaxy_tags: ['Apache Kafka']

@@ -27,6 +27,10 @@
     owner: zk
     group: zk
     mode: '0644'
+- name: ZOOKEEPER - zookeeper path stat
+  stat:
+    path: /opt/apache-zookeeper-{{ zookeeper_version }}-bin
+  register: zookeeper_path_stat
 - block:
   - name: ZOOKEEPER - download zookeeper
     get_url:
@@ -40,7 +44,7 @@
       remote_src: yes
       owner: zk
       group: zk
-  when: "'zookeeper.service' not in services"
+  when: not zookeeper_path_stat.stat.exists
 - name: ZOOKEEPER - link zookeeper home
   file:
     src: /opt/apache-zookeeper-{{ zookeeper_version }}-bin

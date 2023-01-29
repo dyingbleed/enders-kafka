@@ -19,6 +19,10 @@
     mode: '0755'
   with_items: 
     - /var/log/kafka
+- name: KAFKA COMMON - kafka path stat
+  stat:
+    path: /opt/kafka_{{ scala_version }}-{{ kafka_version }}
+  register: kafka_path_stat_result
 - block:
   - name: KAFKA COMMON - download kafka
     get_url:
@@ -31,7 +35,7 @@
       remote_src: yes
       owner: kafka
       group: kafka
-  when: "'kafka.service' not in services"
+  when: not kafka_path_stat_result.stat.exists
 - name: KAFKA COMMON - link kafka home
   file:
     src: /opt/kafka_{{ scala_version }}-{{ kafka_version }}

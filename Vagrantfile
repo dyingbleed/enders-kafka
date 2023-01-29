@@ -10,18 +10,21 @@ Vagrant.configure("2") do |config|
     vb.memory = 2048
   end
 
+  config.vm.define "zookeeper1" do |kafka|
+    kafka.vm.hostname = "zookeeper1"
+    kafka.vm.box = "centos/7"
+    kafka.vm.network "private_network", ip: "192.168.0.2"
+  end
+
   config.vm.define "kafka1" do |kafka|
     kafka.vm.hostname = "kafka1"
     kafka.vm.box = "centos/7"
+    kafka.vm.network "private_network", ip: "192.168.0.3"
   end
 
-  config.vm.define "kafka2" do |kafka|
-    kafka.vm.hostname = "kafka2"
+  config.vm.define "kafka-connect1" do |kafka|
+    kafka.vm.hostname = "kafka-connect1"
     kafka.vm.box = "centos/7"
-  end
-
-  config.vm.define "kafka3" do |kafka|
-    kafka.vm.hostname = "kafka3"
-    kafka.vm.box = "centos/7"
+    kafka.vm.network "private_network", ip: "192.168.0.4"
   end
 end

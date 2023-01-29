@@ -2,8 +2,8 @@
 broker.id={{ kafka_broker_id }}
 
 ############################# Socket Server Settings #############################
-listeners={{ kafka_broker_listeners | default("PLAINTEXT://:9092") }}
-#advertised.listeners=PLAINTEXT://your.host.name:9092
+listeners=PLAINTEXT://:9092
+advertised.listeners=PLAINTEXT://{{ kafka_ip_address | default(ansible_default_ipv4.address) }}:9092
 num.network.threads=3
 num.io.threads=8
 socket.send.buffer.bytes=102400
@@ -30,7 +30,7 @@ log.segment.bytes=1073741824
 log.retention.check.interval.ms=300000
 
 ############################# Zookeeper #############################
-zookeeper.connect={% for host in groups['zookeeper'] %}{{ hostvars[host].zookeeper_address | default(hostvars[host].ansible_default_ipv4.address) }}:2181{% if not loop.last %},{% endif %}{% endfor %}/kafka
+zookeeper.connect={% for host in groups['zookeeper'] %}{{ hostvars[host].zookeeper_ip_address | default(hostvars[host].ansible_default_ipv4.address) }}:2181{% if not loop.last %},{% endif %}{% endfor %}/kafka
 zookeeper.connection.timeout.ms=18000
 
 ############################# Group Coordinator Settings #############################

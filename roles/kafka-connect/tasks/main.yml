@@ -1,0 +1,28 @@
+---
+- name: KAFKA CONNECT - ensure dirs
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: kafka
+    group: kafka
+    mode: '0755'
+  with_items: 
+    - "{{ kafka_connect_plugin_path }}"
+- name: KAFKA CONNECT - copy config files
+  template:
+    src: "{{ item }}"
+    dest: "{{ kafka_home }}/config/{{ item[:-3] }}"
+    owner: kafka
+    group: kafka
+    mode: '0644'
+  with_items: 
+    - connect-distributed.properties.j2
+  notify: restart kafka connect
+- name: KAFKA CONNECT - kafka connect service
+  template:
+    src: kafka-connect.service.j2
+    dest: /etc/systemd/system/kafka-connect.service
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart kafka connect

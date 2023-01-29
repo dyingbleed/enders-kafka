@@ -1,0 +1,15 @@
+[Unit]
+Description=Apache Kafka Connect
+After=network-online.target
+
+[Service]
+Type=simple
+User=kafka
+Group=kafka
+Environment=LOG_DIR=/var/log/kafka
+ExecStart={{ kafka_home }}/bin/connect-distributed.sh {{ kafka_home }}/config/connect-distributed.properties
+Restart=on-failure
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target

@@ -9,3 +9,8 @@
   become: True
   roles:
     - kafka
+- name: deploy kafka connect cluster
+  hosts: kafka_connect
+  become: True
+  roles:
+    - kafka-connect

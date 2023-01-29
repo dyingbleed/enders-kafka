@@ -1,0 +1,29 @@
+bootstrap.servers={% for host in groups['kafka'] %}{{ hostvars[host].kafka_ip_address | default(hostvars[host].ansible_default_ipv4.address) }}:9092{% if not loop.last %},{% endif %}{% endfor %}
+
+group.id=connect-cluster
+
+key.converter=org.apache.kafka.connect.json.JsonConverter
+value.converter=org.apache.kafka.connect.json.JsonConverter
+key.converter.schemas.enable=true
+value.converter.schemas.enable=true
+
+offset.storage.topic=connect-offsets
+offset.storage.replication.factor=1
+offset.storage.partitions={{ groups['kafka'] | length }}
+
+config.storage.topic=connect-configs
+config.storage.replication.factor=1
+
+status.storage.topic=connect-status
+status.storage.replication.factor=1
+status.storage.partitions={{ groups['kafka'] | length }}
+
+offset.flush.interval.ms=10000
+
+rest.host.name={{ kafka_ip_address }}
+rest.port=8083
+
+#rest.advertised.host.name=
+#rest.advertised.port=
+
+plugin.path={{ kafka_connect_plugin_path }}
