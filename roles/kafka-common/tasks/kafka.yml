@@ -1,16 +1,16 @@
-- name: KAFKA - create kafka group
+- name: KAFKA COMMON - create kafka group
   group:
     name: kafka
     system: yes
     state: present
-- name: KAFKA - create kafka user
+- name: KAFKA COMMON - create kafka user
   user:
     name: kafka
     groups: kafka
     append: yes
     system: yes
     state: present
-- name: KAFKA - ensure dirs
+- name: KAFKA COMMON - ensure dirs
   file:
     path: "{{ item }}"
     state: directory
@@ -18,14 +18,13 @@
     group: kafka
     mode: '0755'
   with_items: 
-    - "{{ kafka_log_dirs }}"
     - /var/log/kafka
 - block:
-  - name: KAFKA - download kafka
+  - name: KAFKA COMMON - download kafka
     get_url:
       url: http://archive.apache.org/dist/kafka/{{ kafka_version }}/kafka_{{ scala_version }}-{{ kafka_version }}.tgz
       dest: /tmp
-  - name: KAFKA - unarchive kafka
+  - name: KAFKA COMMON - unarchive kafka
     unarchive:
       src: /tmp/kafka_{{ scala_version }}-{{ kafka_version }}.tgz
       dest: /opt
@@ -33,28 +32,10 @@
       owner: kafka
       group: kafka
   when: "'kafka.service' not in services"
-- name: KAFKA - link kafka home
+- name: KAFKA COMMON - link kafka home
   file:
     src: /opt/kafka_{{ scala_version }}-{{ kafka_version }}
     dest: "{{ kafka_home }}"
     owner: kafka
     group: kafka
     state: link
-- name: KAFKA - copy config files
-  template:
-    src: "{{ item }}"
-    dest: "{{ kafka_home }}/config/{{ item[:-3] }}"
-    owner: kafka
-    group: kafka
-    mode: '0644'
-  with_items: 
-    - server.properties.j2
-  notify: restart kafka
-- name: KAFKA - kafka service
-  template:
-    src: kafka.service.j2
-    dest: /etc/systemd/system/kafka.service
-    owner: root
-    group: root
-    mode: 0644
-  notify: restart kafka

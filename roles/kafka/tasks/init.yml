@@ -1,9 +1,0 @@
-- name: INIT - ensure kafka_broker_id var
-  fail:
-    msg: "kafka_broker_id is required"
-  when: "kafka_broker_id is undefined"
-- name: INIT - service facts
-  service_facts:
-- name: INIT - disable selinux
-  selinux:
-    state: disabled

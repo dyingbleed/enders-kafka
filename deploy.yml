@@ -1,6 +1,11 @@
-- name: kafka
-  hosts: all
+---
+- name: deploy zookeeper cluster
+  hosts: zookeeper
   become: True
   roles:
     - zookeeper
+- name: deploy kafka cluster
+  hosts: kafka
+  become: True
+  roles:
     - kafka
