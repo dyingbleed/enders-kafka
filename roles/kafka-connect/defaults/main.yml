@@ -1,3 +1,8 @@
 ---
+# Kafka
 kafka_home: /opt/kafka
 kafka_connect_plugin_path: /opt/connectors
+
+# MySQL Connector
+mysql_connector_enable: no
+mysql_connector_version: 2.1.2.Final

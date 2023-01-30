@@ -18,6 +18,9 @@
   with_items: 
     - connect-distributed.properties.j2
   notify: restart kafka connect
+- import_tasks:
+    file: mysql-connector.yml
+  when: mysql_connector_enable
 - name: KAFKA CONNECT - kafka connect service
   template:
     src: kafka-connect.service.j2

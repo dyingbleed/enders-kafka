@@ -1,0 +1,18 @@
+- name: MYSQL CONNECTOR - mysql connector path stat
+  stat:
+    path: "{{ kafka_connect_plugin_path }}/debezium-connector-mysql-{{ mysql_connector_version }}-plugin"
+  register: mysql_connector_path_stat
+- block:
+  - name: MYSQL CONNECTOR - download mysql connector
+    get_url:
+      url: https://repo1.maven.org/maven2/io/debezium/debezium-connector-mysql/{{ mysql_connector_version }}/debezium-connector-mysql-{{ mysql_connector_version }}-plugin.tar.gz
+      dest: /tmp
+  - name: MYSQL CONNECTOR - unarchive mysql connector
+    unarchive:
+      src: /tmp/debezium-connector-mysql-{{ mysql_connector_version }}-plugin.tar.gz
+      dest: "{{ kafka_connect_plugin_path }}"
+      remote_src: yes
+      owner: kafka
+      group: kafka
+  notify: restart kafka connect
+  when: not mysql_connector_path_stat.stat.exists
